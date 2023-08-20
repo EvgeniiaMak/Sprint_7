@@ -7,7 +7,7 @@ public class Order {
     private String firstName;
     private String lastName;
     private String address;
-    private int metroStation;
+    private String metroStation;
     private String phone;
     private int rentTime;
     private String deliveryDate;
@@ -18,7 +18,7 @@ public class Order {
     private String updatedAt;
     private int status;
 
-    public Order(int id, int courierId, String firstName, String lastName, String address, int metroStation, String phone, int rentTime, String deliveryDate, String track, String[] color, String comment, String createdAt, String updatedAt, int status) {
+    public Order(int id, int courierId, String firstName, String lastName, String address, String metroStation, String phone, int rentTime, String deliveryDate, String track, String[] color, String comment, String createdAt, String updatedAt, int status) {
         this.id = id;
         this.courierId = courierId;
         this.firstName = firstName;
@@ -79,11 +79,11 @@ public class Order {
         this.address = address;
     }
 
-    public int getMetroStation() {
+    public String getMetroStation() {
         return metroStation;
     }
 
-    public void setMetroStation(int metroStation) {
+    public void setMetroStation(String metroStation) {
         this.metroStation = metroStation;
     }
 

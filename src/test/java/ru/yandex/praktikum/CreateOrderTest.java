@@ -1,22 +1,39 @@
 package ru.yandex.praktikum;
 
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
-import ru.yandex.praktikum.pojo.CourierCreateRequest;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import ru.yandex.praktikum.pojo.CreateOrderRequest;
 
-import java.util.Arrays;
-import java.util.Random;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static ru.yandex.praktikum.api.OrderApi.createOrder;
+import static ru.yandex.praktikum.util.DataPreparer.preparationCreateOrderRequest;
+import static ru.yandex.praktikum.util.TestConstants.BLACK_COLOUR;
+import static ru.yandex.praktikum.util.TestConstants.GRAY_COLOUR;
 
+@RunWith(Parameterized.class)
 public class CreateOrderTest {
 
-    Random random = new Random();
+    private final CreateOrderRequest request;
+
+    public CreateOrderTest(CreateOrderRequest request) {
+        this.request = request;
+    }
+
+
+    @Parameterized.Parameters
+    public static Object[] getCreateOrderRequest() {
+        return new Object[][]{
+                {preparationCreateOrderRequest(new String[]{BLACK_COLOUR})},
+                {preparationCreateOrderRequest(new String[]{GRAY_COLOUR})},
+                {preparationCreateOrderRequest(new String[]{GRAY_COLOUR, BLACK_COLOUR})},
+                {preparationCreateOrderRequest(new String[]{})},
+        };
+    }
 
     @Before
     public void setUp() {
@@ -24,18 +41,12 @@ public class CreateOrderTest {
     }
 
     @Test
-    public void createOrderPositive() {
-
-
-        CreateOrderRequest request = new CreateOrderRequest("Морфиус","Зеонович","Студеный, 32","Медведково","78345623432",2, new String[]{"BLACK"});
-        Response response = given()
-                .header("Content-type", "application/json")
-                .body(request)
-                .post("/api/v1/orders");
+    @DisplayName("Test create order")
+    public void createOrderTest() {
+        Response response = createOrder(request);
         response.then().assertThat().body("track", notNullValue())
                 .and()
                 .statusCode(201);
-
     }
 
 }
